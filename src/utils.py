@@ -1,13 +1,19 @@
-import twitter
-from usr.credentials import token_credentials
-import data.keywords as kw
-import pandas as pd
 from string import Template
 import logging
+import pandas as pd
 
-logging.basicConfig(filename='var/example.log',level=logging.INFO)
+import twitter
+import twint
 
-def fetch_twitter(start_date, end_date):
+from usr.credentials import token_credentials
+import data.keywords as kw
+
+logging.basicConfig(filename='var/scrape.log',
+	format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+	datefmt='%Y-%m-%d %H:%M:%S',
+	level=logging.INFO)
+
+def fetch_twitter_api(start_date, end_date):
 
     # Query Builder
     q = Template('q=cigarro%20eletronico%20lang%3Apt%20until%3A$end_date%20since%3A$start_date&count=100')
@@ -42,3 +48,22 @@ def fetch_twitter(start_date, end_date):
 
     except ValueError as e:
         logging.warning('Something was wrong when saving data from {0} to {1}'.format(start_date, end_date))
+
+
+def search_twitter_twint(search_terms, start_date, end_date):
+    try: 
+        config = twint.Config()
+        config.Search = search_terms
+        config.Since = start_date
+        config.Until = end_date
+        config.Output = 'var/data/{0}_{1}.csv'.format(start_date, 
+                end_date)
+
+        config.Store_csv = True
+
+        query = twint.run.Search(config)
+        logging.info('Data for keyword {0} was stored from {1} to {2}'.format(search_terms.replace(' ', '_'), start_date, end_date))
+        return query
+
+    except ValueError as e:
+         logging.warning('Something was wrong when saving data from {0} to {1}'.format(start_date, end_date))
