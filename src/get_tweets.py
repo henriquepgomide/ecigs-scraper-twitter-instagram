@@ -1,5 +1,3 @@
-#!home/henriquegomide/github_repos/ecig-twitter/env/bin/python
-
 from utils import fetch_twitter_api, search_twitter_twint
 from time import strftime
 from datetime import datetime, timedelta
@@ -21,9 +19,7 @@ end_date = end_date.strftime("%Y-%m-%d")
 
 
 # Run twint 
-# search_twitter_twint('cigarro eletronico', start_date, end_date)
+search_twitter_twint('cigarro eletronico', start_date, end_date)
 
 
 
-# TODO
-# Scrape Instragram using instagram_scraper

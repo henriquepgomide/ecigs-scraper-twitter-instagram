@@ -4,7 +4,6 @@ import pandas as pd
 
 import twitter
 import twint
-
 from usr.credentials import token_credentials
 import data.keywords as kw
 
